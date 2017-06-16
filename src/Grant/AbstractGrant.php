@@ -233,6 +233,10 @@ abstract class AbstractGrant implements GrantTypeInterface
     {
         $requestParameters = (array) $request->getParsedBody();
 
+        if (isset($requestParameters[$parameter]) === false) {
+           $requestParameters = $request->getQueryParams();
+        }
+
         return isset($requestParameters[$parameter]) ? $requestParameters[$parameter] : $default;
     }
 
@@ -463,6 +467,10 @@ abstract class AbstractGrant implements GrantTypeInterface
     public function canRespondToAccessTokenRequest(ServerRequestInterface $request)
     {
         $requestParameters = (array) $request->getParsedBody();
+
+        if (array_key_exists('grant_type', $requestParameters) === false) {
+           $requestParameters = $request->getQueryParams();
+        }
 
         return (
             array_key_exists('grant_type', $requestParameters)
